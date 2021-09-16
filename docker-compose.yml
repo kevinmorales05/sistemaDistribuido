@@ -12,6 +12,10 @@ services:
     build: /app1/compras3
     ports:
       - "5003:5000"
+  api:
+    build: /app1/apiExpressMYSQL
+    ports:
+      - "3050:3050"
   nginx:
     build: ./nginx
     ports:
