@@ -1,7 +1,7 @@
 FROM node:alpine
-WORKDIR '/app'
+WORKDIR '/compras3'
 COPY package.json .
 RUN npm install
 COPY . .
-EXPOSE 3003
+EXPOSE 3002
 CMD ["npm", "start"]

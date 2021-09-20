@@ -1,28 +1,53 @@
 version: '3'
 services: 
-  app1:
+  compras:
     build: ./app1/compras
     ports:
       - "5001:5000"
-  app2:
-    build: /app1/compras2
+  compras2:
+    build: ./app1/compras2
     ports:
       - "5002:5000"
-  app3:
-    build: /app1/compras3
+  compras3:
+    build: ./app1/compras3
     ports:
       - "5003:5000"
-  api:
-    build: /app1/apiExpressMYSQL
+  apiexpressmysql:
+    depends_on:
+      - mysql
+    build: ./app1/apiExpressMYSQL
+    restart: unless-stopped
+    env_file: ./.env
     ports:
-      - "3050:3050"
+      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    environment:
+      - DB_HOST=mysqldb
+      - DB_USER=$MYSQLDB_USER
+      - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - DB_NAME=$MYSQLDB_DATABASE
+      - DB_PORT=$MYSQLDB_DOCKER_PORT
+    stdin_open: true
+    tty: true
+  mysql:
+    image: mysql:5.7
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+    ports:
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    volumes:
+      - db:/var/lib/mysql
   nginx:
     build: ./nginx
     ports:
       - "8080:80"
     depends_on: 
-      - app1
-      - app2
-      - app3
-     
+      - compras
+      - compras2
+      - compras3
+      - apiexpressmysql
+volumes: 
+  db:     
 
