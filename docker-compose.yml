@@ -3,15 +3,15 @@ services:
   compras:
     build: ./app1/compras
     ports:
-      - "5001:5000"
+      - "5001:3000"
   compras2:
     build: ./app1/compras2
     ports:
-      - "5002:5000"
+      - "5002:3000"
   compras3:
     build: ./app1/compras3
     ports:
-      - "5003:5000"
+      - "5003:3000"
   apiexpressmysql:
     depends_on:
       - mysql
@@ -50,4 +50,3 @@ services:
       - apiexpressmysql
 volumes: 
   db:     
-
